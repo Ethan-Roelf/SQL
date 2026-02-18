@@ -1,45 +1,60 @@
+
 /*
-Intermediate Business Queries
+NB: This script contains practice on only the below
+Intermediate (7 Business Queries)
+Advanced (8 Business Queries)
+
+
 High-Value Inventory Audit: Provide a list of all films where the replacement cost is between 24.00 and 29.99 
 and the rental duration is either 3, 5, or 7 days.
-
-Marketing Audience Segmentation: Generate a list of all customers whose first names start with "B" or "K" 
-and who are currently assigned to store ID 2.
-
-Revenue Filtering: Identify all individual payments in the payment table that are not 0.99, 2.99, or 4.99.
-
-Content Research: Find all films that contain the word "Astounding" in their description but do not have a rating of "G".
-
-Active Staff Report: List the staff IDs and the total number of transactions handled by each, 
-excluding any payments that were exactly 0.00.
-
-Specific Rating Analysis: Return all film titles that have a rating of "NC-17" or "R" 
-and have a length that is not between 60 and 90 minutes.
-
-Customer Outreach List: Provide the IDs of all customers who are not active (active = 0) and belong to store ID 1.
 */
 
 SELECT DISTINCT title, replacement_cost, rental_duration FROM film
 WHERE (replacement_cost BETWEEN 24.00 AND 29.99)
 AND rental_duration IN (3,5,7)
 
+/*
+Marketing Audience Segmentation: Generate a list of all customers whose first names start with "B" or "K" 
+and who are currently assigned to store ID 2.
+*/
+
 SELECT first_name FROM customer
 WHERE (first_name LIKE "B%" OR first_name LIKE "K%")
 AND store_id = 2;
 
+/*
+Revenue Filtering: Identify all individual payments in the payment table that are not 0.99, 2.99, or 4.99.
+*/
+
 SELECT amount FROM payment
 WHERE amount NOT IN (0.99, 2.99, 4.99)
 
+/*
+Content Research: Find all films that contain the word "Astounding" in their description but do not have a rating of "G".
+*/
+  
 SELECT DISTINCT title
 FROM film WHERE UPPER(description) LIKE '%ASTOUNDING%'
 AND rating != 'G';
 
+/*
+Active Staff Report: List the staff IDs and the total number of transactions handled by each, 
+excluding any payments that were exactly 0.00.
+*/
+
 SELECT staff_id, COUNT(payment_id) AS num_transactions FROM payment WHERE amount != 0
 GROUP BY staff_id;
+
+/*
+Specific Rating Analysis: Return all film titles that have a rating of "NC-17" or "R" 
+and have a length that is not between 60 and 90 minutes.
+*/
 
 SELECT title FROM film
 WHERE (rating='NC-17' OR 'R')
 AND length NOT BETWEEN 60 AND 90;
+
+/*Customer Outreach List: Provide the IDs of all customers who are not active (active = 0) and belong to store ID 1.*/
 
 SELECT customer_id, active, store_id  FROM customer
 WHERE active = 0 AND store_id = 1;
